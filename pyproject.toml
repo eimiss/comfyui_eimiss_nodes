@@ -1,0 +1,13 @@
+[project]
+name = "comfyui-eimiss-nodes"
+description = "Universal Regional Prompter with a paintable region map, Universal Model Loader, and optional-input checkers for ComfyUI."
+version = "1.0.0"
+license = { file = "LICENSE" }
+
+[project.urls]
+Repository = "https://github.com/eimiss/comfyui_eimiss_nodes"
+
+[tool.comfy]
+PublisherId = "eimiss"
+DisplayName = "Eimiss Nodes"
+Icon = ""
