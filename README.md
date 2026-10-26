@@ -37,7 +37,9 @@ region 2 prompt (green)
 ```
 
 Region colors are fixed: blue, green, red, yellow, magenta, cyan, orange, purple,
-lime, pink. Colors from an external image are snapped to the nearest palette color.
+lime, pink. Colors from an external image are snapped to the nearest palette color;
+colors far from all of them, and colors of regions above the region count, are
+treated as unpainted.
 
 ### cond_area
 
@@ -50,7 +52,9 @@ lime, pink. Colors from an external image are snapped to the nearest palette col
 
 Both modes scale the blending to each region's size, run inside a normal KSampler and
 need no position words in the prompt — the painted map places the content. This pack
-patches ComfyUI's sampler so `mask bounds` also works on 3D-latent models (anima/Wan).
+patches ComfyUI's sampler so `mask bounds` also works on 3D-latent models (anima/Wan)
+and so `full image` can run its passes inside the KSampler; sampling without these
+nodes is unchanged.
 
 `full image` only runs its plan when the KSampler starts from full noise (denoise 1.0);
 img2img and detailer passes with the same conditioning get the regional prompts
@@ -116,9 +120,12 @@ Outputs:
 - **regions** -> Regional Prompter `regions` (keeps both in sync).
 
 ### Tips
-- To turn regional prompting off, bypass the RegionalPainter + RegionalPrompter
-and pick the plain conditioning with an Empty Conditioning Checker.
-- The count of regions should be the same between the prompt and the selected amount in the regional painter.
+
+- To turn regional prompting off, bypass the Regional Painter and Regional Prompter
+  and pick the plain conditioning with an Empty Conditioning Checker.
+- The painter's `regions` must match the number of region sections in the prompt (the
+  base section does not count while `prepend_base_to_regions` is on). Otherwise the
+  Regional Prompter stops with an error that names both counts.
 
 ## Examples
 
@@ -223,7 +230,8 @@ Paint the whole canvas: blue moon, green fox girl, red forest, yellow castle.
 ## Universal Model Loader
 
 Loads a checkpoint and lets you **swap in a separate CLIP (text encoder) and VAE** —
-no extra loaders needed for split models like ANIMA / Illustrious.
+no extra loaders needed for split models like anima. Single-file checkpoints such as
+illustrious need no overrides.
 
 - **checkpoint** — any file from `models/checkpoints`.
 - **clip_override** (optional) — text encoder from `models/clip`, instead of the one inside the checkpoint.
@@ -237,12 +245,12 @@ Example (anima): checkpoint `anima-base-v1.0.safetensors`, `clip_override`
 ## Utils
 
 ### Empty Image Checker
-`images1` and `images2` are both optional: returns `images1` when it is not empty,
-otherwise `images2`.
+`images1` and `images2` are both optional: returns `images1` when it has a value
+(connected and not bypassed), otherwise `images2`.
 
 ### Empty Conditioning Checker
 `conditioning1` and `conditioning2` are both optional: returns `conditioning1` when
-it is not empty, otherwise `conditioning2`. Typical use: `conditioning1` = Regional
+it has a value (connected and not bypassed), otherwise `conditioning2`. Typical use: `conditioning1` = Regional
 Prompter output, `conditioning2` = plain CLIP Text Encode, so bypassing the regional
 nodes falls back to the plain conditioning automatically.
 
