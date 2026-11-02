@@ -256,7 +256,7 @@ nodes falls back to the plain conditioning automatically.
 
 ## Installation
 
-- **ComfyUI Manager:** open the Manager, search for **comfyui_eimiss_nodes**, install it and
+- **ComfyUI Manager:** open the Manager, search for **ComfyUI-Eimiss-Nodes**, install it and
   restart ComfyUI.
 - **GitHub:** clone the repository into `ComfyUI/custom_nodes` and restart ComfyUI:
 
