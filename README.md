@@ -254,6 +254,18 @@ it has a value (connected and not bypassed), otherwise `conditioning2`. Typical 
 Prompter output, `conditioning2` = plain CLIP Text Encode, so bypassing the regional
 nodes falls back to the plain conditioning automatically.
 
+## Installation
+
+- **ComfyUI Manager:** open the Manager, search for **comfyui_eimiss_nodes**, install it and
+  restart ComfyUI.
+- **GitHub:** clone the repository into `ComfyUI/custom_nodes` and restart ComfyUI:
+
+  ```
+  git clone https://github.com/eimiss/comfyui_eimiss_nodes
+  ```
+
+No extra Python packages are needed.
+
 ## Credits
 
 - The idea of painting regions with their own prompts is inspired by hako-mikan's
