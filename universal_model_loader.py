@@ -40,7 +40,10 @@ class UniversalModelLoader:
         # Replace CLIP if selected
         if clip_override != "None":
             clip_path = folder_paths.get_full_path("clip", clip_override)
-            clip = comfy.sd.load_clip(ckpt_paths=[clip_path], embedding_directory=folder_paths.get_folder_paths("embeddings"))
+            # Match the text encoder type to the checkpoint's model family, like CLIPLoader's "type".
+            image_model = model.model.model_config.unet_config.get("image_model", "")
+            clip_type = getattr(comfy.sd.CLIPType, image_model.upper(), comfy.sd.CLIPType.STABLE_DIFFUSION)
+            clip = comfy.sd.load_clip(ckpt_paths=[clip_path], embedding_directory=folder_paths.get_folder_paths("embeddings"), clip_type=clip_type)
 
         # Replace VAE if selected
         if vae_override != "None":
